@@ -38,8 +38,8 @@ def ScrapedUserIds(output_dir: str) -> List[str]:
 
 def LoadTwitterUserIds(csv_file: str) -> List[str]:
     """Loads the list of Twitter user IDs from a CSV file. The CSV file has a
-    column called "Link" where it contains links to the homepage of a Twitter
-    user.
+    column called "Link" where it contains a list of links to the homepages of
+    Twitter users.
 
     Args:
         csv_file (str): File path to the CSV file.
