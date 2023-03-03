@@ -1,6 +1,6 @@
+import logging
 import pickle
 import re
-import logging
 from os import path
 from snscrape.modules.twitter import TwitterSearchScraper
 
