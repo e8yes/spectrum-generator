@@ -1,25 +1,7 @@
 import logging
 import pickle
-import re
 from os import path
 from snscrape.modules.twitter import TwitterSearchScraper
-
-
-_USER_ID_RE = re.compile(pattern=".*://twitter.com/(.+)")
-
-
-def ToTwitterUserId(link: str) -> str:
-    """Extracts a user's twitter ID from the homepage link.
-
-    Args:
-        link (str): The user's twitter homepage link. e.g.
-            https://twitter.com/SenatorBaldwin
-
-    Returns:
-        str: The user's twitter ID.
-    """
-    match = _USER_ID_RE.match(string=link)
-    return match.group(1)
 
 
 def ScrapeUserTimeline(user_id: str, output_dir: str) -> None:
