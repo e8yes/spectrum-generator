@@ -1,4 +1,6 @@
 from pandas import DataFrame
+from pandas import Series
+from pandas import DatetimeTZDtype
 
 from src.dataprep.raw.common import LoadRawTimeline
 from src.dataprep.raw.common import RawTimelineFiles
@@ -24,21 +26,29 @@ class _UserProfileColumns:
 
     def CreateTable(self) -> DataFrame:
         return DataFrame(data={
-            "user_name": self.user_names,
-            "display_name": self.display_names,
-            "description": self.descriptions,
-            "description_links": self.description_links,
-            "verification_status": self.verification_statuses,
-            "creation_date": self.creation_dates,
-            "followers_count": self.followers_counts,
-            "friends_count": self.friends_counts,
-            "statuses_count": self.statuses_counts,
-            "favourites_count": self.favourites_counts,
-            "listed_count": self.listed_counts,
-            "media_count": self.media_counts,
-            "location": self.locations,
-            "protection_status": self.protection_statuses,
-            "link": self.links,
+            "user_name": Series(data=self.user_names, dtype=str),
+            "display_name": Series(data=self.display_names, dtype=str),
+            "description": Series(data=self.descriptions, dtype=str),
+            "description_links": Series(
+                data=self.description_links, dtype=object),
+            "verification_status": Series(
+                data=self.verification_statuses, dtype=bool),
+            "creation_date": Series(
+                data=self.creation_dates, dtype=DatetimeTZDtype),
+            "followers_count": Series(
+                data=self.followers_counts, dtype=int),
+            "friends_count": Series(
+                data=self.friends_counts, dtype=int),
+            "statuses_count": Series(
+                data=self.statuses_counts, dtype=int),
+            "favourites_count": Series(
+                data=self.favourites_counts, dtype=int),
+            "listed_count": Series(data=self.listed_counts, dtype=int),
+            "media_count": Series(data=self.media_counts, dtype=int),
+            "location": Series(data=self.locations, dtype=str),
+            "protection_status": Series(
+                data=self.protection_statuses, dtype=bool),
+            "link": Series(data=self.links, dtype=str),
         })
 
 
@@ -104,7 +114,3 @@ def CreateUsersProfileTable(raw_timeline_dir: str) -> DataFrame:
         _AddRow(raw_timeline_file=raw_timeline_file, cols=cols)
 
     return cols.CreateTable()
-
-
-df = CreateUsersProfileTable(raw_timeline_dir="data/tweets")
-print(df.columns)
