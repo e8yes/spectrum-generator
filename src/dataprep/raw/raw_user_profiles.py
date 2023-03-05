@@ -114,7 +114,8 @@ def CreateUsersProfileTable(raw_timeline_dir: str) -> DataFrame:
             raw_timeline_dir=raw_timeline_dir):
         _AddRow(raw_timeline_file=raw_timeline_file, cols=cols)
 
-        logging.info("CreateUsersProfileTable: Processing {0}".format(
-            raw_timeline_file))
+        logging.info(
+            "CreateUsersProfileTable: Processed user profile {0}".format(
+                raw_timeline_file))
 
     return cols.CreateTable()
