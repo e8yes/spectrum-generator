@@ -1,3 +1,4 @@
+import logging
 from pandas import DataFrame
 from pandas import Series
 from pandas import DatetimeTZDtype
@@ -112,5 +113,8 @@ def CreateUsersProfileTable(raw_timeline_dir: str) -> DataFrame:
     for raw_timeline_file in RawTimelineFiles(
             raw_timeline_dir=raw_timeline_dir):
         _AddRow(raw_timeline_file=raw_timeline_file, cols=cols)
+
+        logging.info("CreateUsersProfileTable: Processing {0}".format(
+            raw_timeline_file))
 
     return cols.CreateTable()
