@@ -6,6 +6,7 @@ from src.dataprep.raw.common import LoadRawTimeline
 from src.dataprep.raw.common import RawTimelineFiles
 from snscrape.modules.twitter import Tweet
 from snscrape.modules.twitter import User
+from snscrape.modules.twitter import SummaryCard
 from snscrape.modules.twitter import TextLink
 from snscrape.modules.twitter import Medium
 from snscrape.modules.twitter import Photo
@@ -74,6 +75,12 @@ class _TweetColumns:
         self.context_vibe_texts = list()
         self.context_types = list()
 
+        self.external_content_titles = list()
+        self.external_content_urls = list()
+        self.external_content_summaries = list()
+        self.external_content_usernames = list()
+        self.external_creator_usernames = list()
+
     def CreateTable(self) -> DataFrame:
         return DataFrame(data={
             "id": Series(data=self.ids, dtype=int),
@@ -139,6 +146,17 @@ class _TweetColumns:
             "context_vibe_text": Series(
                 data=self.context_vibe_texts, dtype=str),
             "context_types": Series(data=self.context_types, dtype=str),
+
+            "external_content_title": Series(
+                data=self.external_content_titles, dtype=str),
+            "external_content_url": Series(
+                data=self.external_content_urls, dtype=str),
+            "external_content_summary": Series(
+                data=self.external_content_summaries, dtype=str),
+            "external_content_username": Series(
+                data=self.external_content_usernames, dtype=str),
+            "external_creator_username": Series(
+                data=self.external_creator_usernames, dtype=str),
         })
 
 
@@ -182,7 +200,7 @@ def _ExtractVibeText(vibe: Optional[Vibe]) -> str:
     return vibe.text
 
 
-def _ExtractRepliedUserName(user: Optional[User]) -> str:
+def _ExtractUserName(user: Optional[User]) -> str:
     if user is None:
         return None
     return user.username
@@ -207,11 +225,25 @@ def _AddRow(user_name: str, tweet: Tweet, cols: _TweetColumns) -> None:
     cols.links.append(_ExtractLinks(links=tweet.links))
     cols.media_types.append(_ExtractMediaTypes(media=tweet.media))
     cols.reply_tweet_ids.append(tweet.inReplyToTweetId)
-    cols.reply_user_names.append(
-        _ExtractRepliedUserName(user=tweet.inReplyToUser))
+    cols.reply_user_names.append(_ExtractUserName(user=tweet.inReplyToUser))
     cols.hashtags.append(_ExtractTags(tags=tweet.hashtags))
     cols.cashtags.append(_ExtractTags(tags=tweet.cashtags))
     cols.vibe_texts.append(_ExtractVibeText(vibe=tweet.vibe))
+
+    if tweet.card is not None and isinstance(tweet.card, SummaryCard):
+        cols.external_content_urls.append(tweet.card.url)
+        cols.external_content_titles.append(tweet.card.title)
+        cols.external_content_summaries.append(tweet.card.description)
+        cols.external_content_usernames.append(
+            _ExtractUserName(user=tweet.card.siteUser))
+        cols.external_creator_usernames.append(
+            _ExtractUserName(user=tweet.card.creatorUser))
+    else:
+        cols.external_content_urls.append(None)
+        cols.external_content_titles.append(None)
+        cols.external_content_summaries.append(None)
+        cols.external_content_usernames.append(None)
+        cols.external_creator_usernames.append(None)
 
     context_tweet: Tweet = None
     context_type: str = None
@@ -247,7 +279,7 @@ def _AddRow(user_name: str, tweet: Tweet, cols: _TweetColumns) -> None:
             _ExtractMediaTypes(media=context_tweet.media))
         cols.context_reply_tweet_ids.append(context_tweet.inReplyToTweetId)
         cols.context_reply_user_names.append(
-            _ExtractRepliedUserName(user=context_tweet.inReplyToUser))
+            _ExtractUserName(user=context_tweet.inReplyToUser))
         cols.context_hashtags.append(_ExtractTags(tags=context_tweet.hashtags))
         cols.context_cashtags.append(_ExtractTags(tags=context_tweet.cashtags))
         cols.context_vibe_texts.append(
@@ -344,6 +376,11 @@ def CreateRawTweetTable(raw_timeline_dir: str) -> DataFrame:
                 context_hashtags: List[str]
                 context_cashtags: List[str]
                 context_vibe_text: str
+                external_content_title: str
+                external_content_url: str
+                external_content_summary: str
+                external_content_username: str
+                external_creator_username: str
     """
     cols = _TweetColumns()
 
