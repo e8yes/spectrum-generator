@@ -376,6 +376,7 @@ def CreateRawTweetTable(raw_timeline_dir: str) -> DataFrame:
                 context_hashtags: List[str]
                 context_cashtags: List[str]
                 context_vibe_text: str
+                context_type: str
                 external_content_title: str
                 external_content_url: str
                 external_content_summary: str
