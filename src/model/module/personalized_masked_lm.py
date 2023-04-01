@@ -37,6 +37,10 @@ class PersonalizedMaskedLanguageModel(Module):
             out_features=self.tokenizer.vocab_size)
         self.seq_softmax = Softmax(dim=1)
 
+        # Freezes the language model.
+        for parameter in self.bert.parameters():
+            parameter.requires_grad = False
+
     def forward(self,
                 user_profiles: Tensor,
                 tokens: Tensor,
