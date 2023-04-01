@@ -1,10 +1,10 @@
 import unittest
 
 from src.model.example.constants import MASK_TOKEN
-from src.model.example.generate_mask import SampleMaskedSentence
+from src.model.example.example import SampleMaskedSentence
 
 
-class GenerateMaskTest(unittest.TestCase):
+class ExampleTest(unittest.TestCase):
     def test_SampleMaskedSentence(self):
         sentence = ["A", "A", "B"]
         word_importance = [0.0, 1.0, 0.0]
