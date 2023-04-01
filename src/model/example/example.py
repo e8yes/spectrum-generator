@@ -1,8 +1,8 @@
 from torch import Tensor
-from torch import IntTensor
+from torch import LongTensor
 from torch import full
 from torch import hstack
-from torch import int32
+from torch import long
 from transformers import BertTokenizer
 from typing import List
 from typing import Set
@@ -10,7 +10,6 @@ from math import ceil
 import numpy as np
 
 from src.model.example.constants import LANGUAGE_MODEL_TYPE
-from src.model.example.constants import LANGUAGE_MODEL_CLS_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_SEP_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
 
@@ -55,14 +54,14 @@ def EncodeMaskedInput(text: List[str],
                                add_special_tokens=False,
                                return_token_type_ids=False,
                                return_attention_mask=False,
-                               return_tensors="pt")["input_ids"].int()
+                               return_tensors="pt")["input_ids"].long()
 
         masked_code: Tensor = None
         if i in masked_positions:
             masked_code = full(
                 size=label_code.size(),
                 fill_value=LANGUAGE_MODEL_MASK_TOKEN_ID,
-                dtype=int32)
+                dtype=long)
         else:
             masked_code = label_code
 
@@ -105,7 +104,7 @@ class ExampleBuilder:
         self.tokenizer = BertTokenizer.from_pretrained(LANGUAGE_MODEL_TYPE)
 
     def Build(self,
-              user_id: str,
+              user_id: int,
               context_content: List[str],
               external_content_summary: List[str],
               content: List[str],
@@ -113,7 +112,7 @@ class ExampleBuilder:
         """_summary_
 
         Args:
-            user_id (str): _description_
+            user_id (int): _description_
             context_content (List[str]): _description_
             external_content_summary (List[str]): _description_
             content (List[str]): _description_
@@ -122,19 +121,36 @@ class ExampleBuilder:
         Returns:
             Example: _description_
         """
-        context_code = self.tokenizer(
-            " ".join(context_content),
-            add_special_tokens=False,
-            return_token_type_ids=False,
-            return_attention_mask=False,
-            return_tensors="pt")["input_ids"].int()
+        sep = LongTensor([[LANGUAGE_MODEL_SEP_TOKEN_ID]])
 
-        external_content_summary_code = self.tokenizer(
-            " ".join(external_content_summary),
-            add_special_tokens=False,
-            return_token_type_ids=False,
-            return_attention_mask=False,
-            return_tensors="pt")["input_ids"].int()
+        training_features = list()
+        training_label = list()
+
+        if len(context_content) > 0:
+            context_code = self.tokenizer(
+                " ".join(context_content),
+                add_special_tokens=False,
+                return_token_type_ids=False,
+                return_attention_mask=False,
+                return_tensors="pt")["input_ids"].long()
+
+            training_features.append(context_code)
+            training_features.append(sep)
+            training_label.append(context_code)
+            training_label.append(sep)
+
+        if len(external_content_summary) > 0:
+            external_content_summary_code = self.tokenizer(
+                " ".join(external_content_summary),
+                add_special_tokens=False,
+                return_token_type_ids=False,
+                return_attention_mask=False,
+                return_tensors="pt")["input_ids"].long()
+
+            training_features.append(external_content_summary_code)
+            training_features.append(sep)
+            training_label.append(external_content_summary_code)
+            training_label.append(sep)
 
         masked_positions = SampleSentenceMask(
             sentence=content, word_importance=content_importance)
@@ -143,24 +159,14 @@ class ExampleBuilder:
             masked_positions=masked_positions,
             tokenizer=self.tokenizer)
 
-        cls = IntTensor([[LANGUAGE_MODEL_CLS_TOKEN_ID]])
-        sep = IntTensor([[LANGUAGE_MODEL_SEP_TOKEN_ID]])
+        training_features.append(masked_content_code)
+        training_features.append(sep)
+        training_label.append(label_content_code)
+        training_label.append(sep)
 
-        masked_token_ids = hstack([
-            cls,
-            context_code,
-            external_content_summary_code,
-            masked_content_code,
-            sep,
-        ])
-        label_token_ids = hstack([
-            cls,
-            context_code,
-            external_content_summary_code,
-            label_content_code,
-            sep,
-        ])
+        masked_token_ids = hstack(training_features)
+        label_token_ids = hstack(training_label)
 
-        return Example(user_id=IntTensor([user_id]),
+        return Example(user_id=LongTensor([user_id]),
                        masked_token_ids=masked_token_ids,
                        label_token_ids=label_token_ids)
