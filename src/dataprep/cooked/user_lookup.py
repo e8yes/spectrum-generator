@@ -34,3 +34,19 @@ def BuildUserLookup(raw_user_profile: DataFrame) -> Dict[str, int]:
         user_id += 1
 
     return lookup
+
+
+def UserNameToId(user_name: str, user_lookup: Dict[str, int]) -> int:
+    """_summary_
+
+    Args:
+        user_name (str): _description_
+        user_lookup (Dict[str, int]): _description_
+
+    Returns:
+        int: _description_
+    """
+    if user_name not in user_lookup:
+        return None
+
+    return user_lookup[user_name]
