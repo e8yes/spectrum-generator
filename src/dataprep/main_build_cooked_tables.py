@@ -22,11 +22,11 @@ def _Cook(raw_user_profile_file: str,
     user_tweets = BuildUserTweetTable(raw_timelines=raw_timelines,
                                       user_lookup=user_lookup)
     del raw_timelines
-    user_tweets.to_csv(path.join(output_path, "user_tweets.csv"))
+    user_tweets.to_pickle(path.join(output_path, "user_tweets"))
 
     word_doc_freq = AssignWordImportance(user_tweet_df=user_tweets)
-    user_tweets.to_csv(
-        path.join(output_path, "user_tweets_final.csv"))
+    user_tweets.to_pickle(
+        path.join(output_path, "user_tweets_final"))
     word_doc_freq.to_csv(
         path.join(output_path, "user_tweet_word_doc_freq.csv"))
 
