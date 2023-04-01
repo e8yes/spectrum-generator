@@ -59,7 +59,7 @@ def _ComputeSentenceImportance(user_tweet_df: DataFrame,
     for _, row in user_tweet_df.iterrows():
         sentence_importance = list()
 
-        for word in set(row[text_col_name]):
+        for word in row[text_col_name]:
             if word in idf_lookup:
                 sentence_importance.append(idf_lookup[word])
             else:
