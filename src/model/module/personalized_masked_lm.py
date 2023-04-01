@@ -4,11 +4,13 @@ from torch.nn import Linear
 from torch.nn import ReLU
 from torch.nn import Softmax
 from torch import Tensor
+from torch import zeros
+from torch import long
 from transformers import BertModel
-from transformers import BertTokenizer
 
-_LM_FEATURE_SIZE = 768
-_LM_MODEL = "bert-base-uncased"
+from src.model.example.constants import LANGUAGE_MODEL_TYPE
+from src.model.example.constants import LANGUAGE_MODEL_FEATURE_SIZE
+from src.model.example.constants import LANGUAGE_MODEL_VOCAB_SIZE
 
 
 class PersonalizedMaskedLanguageModel(Module):
@@ -23,18 +25,17 @@ class PersonalizedMaskedLanguageModel(Module):
         """
         super().__init__()
 
-        self.bert = BertModel.from_pretrained(_LM_MODEL)
-        self.tokenizer = BertTokenizer.from_pretrained(_LM_MODEL)
+        self.bert = BertModel.from_pretrained(LANGUAGE_MODEL_TYPE)
 
         self.user_profile_size = user_profile_size
 
         self.seq_linear1 = Linear(
-            in_features=user_profile_size + _LM_FEATURE_SIZE,
-            out_features=user_profile_size + _LM_FEATURE_SIZE)
+            in_features=user_profile_size + LANGUAGE_MODEL_FEATURE_SIZE,
+            out_features=user_profile_size + LANGUAGE_MODEL_FEATURE_SIZE)
         self.seq_relu = ReLU()
         self.seq_linear2 = Linear(
-            in_features=user_profile_size + _LM_FEATURE_SIZE,
-            out_features=self.tokenizer.vocab_size)
+            in_features=user_profile_size + LANGUAGE_MODEL_FEATURE_SIZE,
+            out_features=LANGUAGE_MODEL_VOCAB_SIZE)
         self.seq_softmax = Softmax(dim=1)
 
         # Freezes the language model.
@@ -44,15 +45,13 @@ class PersonalizedMaskedLanguageModel(Module):
     def forward(self,
                 user_profiles: Tensor,
                 tokens: Tensor,
-                token_types: Tensor,
-                attention_mask: Tensor) -> Tensor:
+                attention_masks: Tensor) -> Tensor:
         """_summary_
 
         Args:
             user_profiles (Tensor): _description_
             tokens (Tensor): _description_
-            token_types (Tensor): _description_
-            attention_mask (Tensor): _description_
+            attention_masks (Tensor): _description_
 
         Returns:
             Tensor: _description_
@@ -60,8 +59,8 @@ class PersonalizedMaskedLanguageModel(Module):
         # Computes textual features.
         text_features = self.bert(
             input_ids=tokens,
-            token_type_ids=token_types,
-            attention_mask=attention_mask)
+            token_type_ids=zeros(size=tokens.size(), dtype=long),
+            attention_mask=attention_masks)
 
         # Concatenates user profiles with textual features.
         batch_size = text_features.last_hidden_state.size()[0]
