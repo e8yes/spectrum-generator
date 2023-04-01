@@ -15,9 +15,9 @@ from src.model.example.constants import LANGUAGE_MODEL_SEP_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
 
 
-def SampleMaskedSentence(sentence: List[str],
-                         word_importance: List[float],
-                         mask_ratio: float = 0.15) -> Set[int]:
+def SampleSentenceMask(sentence: List[str],
+                       word_importance: List[float],
+                       mask_ratio: float = 0.15) -> Set[int]:
     """_summary_
 
     Args:
@@ -136,7 +136,7 @@ class ExampleBuilder:
             return_attention_mask=False,
             return_tensors="pt")["input_ids"].int()
 
-        masked_positions = SampleMaskedSentence(
+        masked_positions = SampleSentenceMask(
             sentence=content, word_importance=content_importance)
         label_content_code, masked_content_code = EncodeMaskedInput(
             text=content,
