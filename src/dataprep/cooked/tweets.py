@@ -2,6 +2,7 @@ from pandas import DataFrame
 from pandas import read_pickle
 from typing import Dict
 
+from src.dataprep.cooked.constants import TWEET_MINIMUM_LENGTH_THRESHOLD
 from src.dataprep.cooked.user_lookup import UserNameToId
 from src.dataprep.cooked.text_tokenizer import CleanText
 from src.dataprep.cooked.text_tokenizer import TokenizeText
@@ -47,10 +48,17 @@ def BuildUserTweetTable(raw_timelines: DataFrame,
         apply(CleanText).                                   \
         apply(TokenizeText)
 
-    return DataFrame(data={
+    user_tweets = DataFrame(data={
         "tweet_id": tweet_ids.astype(int),
         "user_id": user_ids.astype(int),
         "context_content": context_contents,
         "external_content_summary": external_content_summaries,
         "content": contents,
     })
+
+    short_tweets = user_tweets["content"].                  \
+        map(len) < TWEET_MINIMUM_LENGTH_THRESHOLD
+    user_tweets.drop(user_tweets[short_tweets].index,
+                     inplace=True)
+
+    return user_tweets
