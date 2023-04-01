@@ -73,6 +73,12 @@ class BatchExamples:
         self.attention_masks = attention_masks
         self.label_token_ids = label_token_ids
 
+    def __repr__(self) -> str:
+        return f"user_ids={self.user_ids}\n\
+masked_token_ids={self.masked_token_ids}\n\
+attention_masks={self.attention_masks}\n\
+label_token_ids={self.label_token_ids}"
+
 
 class BatchExampleBuilder:
     def __init__(self) -> None:
