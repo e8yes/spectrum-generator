@@ -6,8 +6,8 @@ from torch import vstack
 from typing import List
 from typing import Tuple
 
-from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
-from src.model.example.constants import LANGUAGE_MODEL_UNMASK_TOKEN_ID
+# from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
+# from src.model.example.constants import LANGUAGE_MODEL_UNMASK_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_PAD_TOKEN_ID
 from src.model.example.example import Example
 from src.model.example.example import ExampleBuilder
@@ -117,8 +117,8 @@ class BatchExampleBuilder:
         attention_masks = (masked_tokens != LANGUAGE_MODEL_PAD_TOKEN_ID).long()
 
         label_tokens = _PaddedSequences(seqs=label_tokens, max_len=max_len)
-        label_tokens[masked_tokens != LANGUAGE_MODEL_MASK_TOKEN_ID] = \
-            LANGUAGE_MODEL_UNMASK_TOKEN_ID
+        # label_tokens[masked_tokens != LANGUAGE_MODEL_MASK_TOKEN_ID] = \
+        #     LANGUAGE_MODEL_UNMASK_TOKEN_ID
 
         return BatchExamples(
             user_ids=user_ids,
