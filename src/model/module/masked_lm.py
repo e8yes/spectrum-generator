@@ -43,17 +43,19 @@ class BaselineMaskedLanguageModelProvider(ModelProviderInterface):
     def Name(self) -> str:
         return "baseline_model"
 
-    def LoadOrCreate(self, model_path: str) -> Module:
-        if model_path is None:
-            return BaselineMaskedLanguageModel()
+    def LoadOrCreate(self, model_path: str):
+        if model_path is not None:
+            self.Load(model_path=model_path)
+            return
+
+        self.model = BaselineMaskedLanguageModel()
 
     def Loss(self,
-             model: Module,
              user_ids: Tensor,
              years: Tensor,
              tokens: Tensor,
              attention_masks: Tensor,
              labels: Tensor) -> Tensor:
-        return model(tokens=tokens,
-                     attention_masks=attention_masks,
-                     label_tokens=labels)
+        return self.model(tokens=tokens,
+                          attention_masks=attention_masks,
+                          label_tokens=labels)

@@ -92,17 +92,20 @@ class UserProfileExtractionModelProvider(ModelProviderInterface):
         return "personalized_model"
 
     def LoadOrCreate(self, model_path: str) -> Module:
-        if model_path is None:
-            return UserProfileExtractionModel(user_count=self.user_count)
+        if model_path is not None:
+            self.Load(model_path=model_path)
+            return
+
+        self.model = UserProfileExtractionModel(
+            user_count=self.user_count)
 
     def Loss(self,
-             model: Module,
              user_ids: Tensor,
              years: Tensor,
              tokens: Tensor,
              attention_masks: Tensor,
              labels: Tensor) -> Tensor:
-        preds_and_logits = model(
+        preds_and_logits = self.model(
             user_ids=user_ids,
             tokens=tokens,
             attention_masks=attention_masks)

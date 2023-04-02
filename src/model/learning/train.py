@@ -1,6 +1,4 @@
 from json import load
-from os import path
-from torch import save
 from torch.optim import Adam
 
 from src.model.module.model_provider_factory import CreateModelProvider
@@ -35,32 +33,25 @@ def TrainModel(model_type: str,
         user_lookup_file_path=user_lookup_file_path)
     model_provider = CreateModelProvider(
         model_type=model_type, user_count=user_count)
-    model = model_provider.LoadOrCreate(model_path=existing_model_path)
+    model_provider.LoadOrCreate(model_path=existing_model_path)
 
-    params = [p for p in model.parameters() if p.requires_grad]
-    param_count = sum(p.numel() for p in params)
-    print(f"model={model_provider.Name()} param_count={param_count}")
-
+    params, param_count = model_provider.TrainableParameters()
     optimizer = Adam(params=params)
+
+    print(f"model={model_provider.Name()} param_count={param_count}")
 
     for epoch_num in range(epoch_count):
         print(f"model={model_provider.Name()} @{epoch_num}")
-
-        model_checkpoint_path = path.join(
-            output_path, f"{epoch_num}_{model_provider.Name()}.pt")
-        save(model, model_checkpoint_path)
+        model_provider.Save(
+            model_path=output_path, tag=str(epoch_num))
 
         TrainEpoch(epoch_number=epoch_num,
                    model_provider=model_provider,
-                   model=model,
                    optimizer=optimizer,
                    user_tweet_file_path=user_tweet_file_path,
                    log_path=output_path)
 
-    model_output_path = path.join(
-        output_path, "{model_provider.Name()}.pt")
-    save(model, model_output_path)
+    model_provider.Save(
+        model_path=output_path, tag="final")
 
     print(f"model={model_provider.Name()} finished.")
-
-    return model

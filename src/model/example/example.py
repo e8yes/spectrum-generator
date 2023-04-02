@@ -10,6 +10,7 @@ from math import ceil
 import numpy as np
 
 from src.model.example.constants import LANGUAGE_MODEL_TYPE
+# from src.model.example.constants import LANGUAGE_MODEL_CLS_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_SEP_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
 

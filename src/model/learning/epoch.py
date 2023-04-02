@@ -1,6 +1,5 @@
 from os import path
 from torch.optim import Optimizer
-from torch.nn import Module
 
 from src.model.example.epoch import DataEpoch
 from src.model.module.model_provider import ModelProviderInterface
@@ -26,7 +25,6 @@ def _AppendReportFile(log_path: str,
 
 def TrainEpoch(epoch_number: str,
                model_provider: ModelProviderInterface,
-               model: Module,
                optimizer: Optimizer,
                user_tweet_file_path: str,
                log_path: str) -> None:
@@ -45,14 +43,13 @@ def TrainEpoch(epoch_number: str,
                       epoch_number=epoch_number)
 
     epoch = DataEpoch(user_tweet_file_path=user_tweet_file_path, batch_size=64)
-    model.train()
+    model_provider.SetMode(mode="train")
 
     last_progress = -1
     for progress, batch in epoch:
         optimizer.zero_grad()
 
-        loss = model_provider.Loss(model=model,
-                                   user_ids=batch.user_ids,
+        loss = model_provider.Loss(user_ids=batch.user_ids,
                                    years=None,
                                    tokens=batch.masked_token_ids,
                                    attention_masks=batch.attention_masks,

@@ -1,5 +1,11 @@
-from torch.nn import Module
+from os import path
 from torch import Tensor
+from torch import load
+from torch import save
+from torch.nn import Module
+from torch.nn import Parameter
+from typing import List
+from typing import Tuple
 
 
 class ModelProviderInterface:
@@ -7,7 +13,7 @@ class ModelProviderInterface:
     """
 
     def __init__(self) -> None:
-        pass
+        self.model = Module()
 
     def Name(self) -> str:
         """_summary_
@@ -17,7 +23,7 @@ class ModelProviderInterface:
         """
         return None
 
-    def LoadOrCreate(self, model_path: str) -> Module:
+    def LoadOrCreate(self, model_path: str) -> None:
         """_summary_
 
         Args:
@@ -26,10 +32,9 @@ class ModelProviderInterface:
         Returns:
             Module: _description_
         """
-        return None
+        pass
 
     def Loss(self,
-             model: Module,
              user_ids: Tensor,
              years: Tensor,
              tokens: Tensor,
@@ -38,7 +43,6 @@ class ModelProviderInterface:
         """_summary_
 
         Args:
-            model (Module): _description_
             user_ids (Tensor): _description_
             years (Tensor): _description_
             tokens (Tensor): _description_
@@ -49,3 +53,54 @@ class ModelProviderInterface:
             Tensor: _description_
         """
         return None
+
+    def SetMode(self, mode: str) -> None:
+        """_summary_
+
+        Args:
+            mode (str): _description_
+        """
+        if mode == "train":
+            self.model.train()
+        elif mode == "eval":
+            self.model.eval()
+        else:
+            assert False
+
+    def TrainableParameters(self) -> Tuple[List[Parameter], int]:
+        """_summary_
+
+        Returns:
+            Tuple[List[Parameter], int]: _description_
+        """
+        params = [p for p in self.model.parameters() if p.requires_grad]
+        param_count = sum(p.numel() for p in params)
+
+        return params, param_count
+
+    def Load(self, model_path: str) -> None:
+        """_summary_
+
+        Args:
+            model_path (str): _description_
+        """
+        assert model_path is not None
+
+        model_input_path = path.join(model_path,
+                                     f"{self.Name()}.pt")
+        self.model = load(model_input_path)
+
+    def Save(self, model_path: str, tag: str) -> None:
+        """_summary_
+
+        Args:
+            model_path (str): _description_
+            tag (str): _description_
+        """
+        assert model_path is not None
+        assert tag is not None
+
+        model_output_path = path.join(
+            model_path,
+            f"{self.Name()}_{tag}.pt")
+        save(self.model, model_output_path)
