@@ -20,7 +20,7 @@ if __name__ == "__main__":
         help="The type of model to train for. Values can either be baseline or"
         " personalized")
     parser.add_argument(
-        "--epoch_count", type=str,
+        "--epoch_count", type=int,
         help="The number of epochs to train for.")
     parser.add_argument(
         "--existing_model_file", type=str,
