@@ -8,12 +8,12 @@ from typing import Tuple
 from src.model.example.constants import LANGUAGE_MODEL_UNMASK_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_VOCAB_SIZE
 from src.model.module.user_embeddings import UserEmbeddings
-from src.model.module.personalized_masked_lm import \
-    PersonalizedMaskedLanguageModel
+from src.model.module.personalized_masked_token_classifier import \
+    PersonalizedMaskedTokenClassifier
 from src.model.module.model_provider import ModelProviderInterface
 
 
-class UserProfileExtractionModel(Module):
+class PersonalizedMaskedLanguageModel(Module):
     def __init__(self,
                  user_count: int) -> None:
         super().__init__()
@@ -22,7 +22,7 @@ class UserProfileExtractionModel(Module):
 
         self.user_embed = UserEmbeddings(
             user_count=user_count, user_profile_size=user_profile_size)
-        self.pmlm = PersonalizedMaskedLanguageModel(
+        self.classifer = PersonalizedMaskedTokenClassifier(
             user_profile_size=user_profile_size)
 
     def forward(self,
@@ -40,7 +40,7 @@ class UserProfileExtractionModel(Module):
             Tensor: _description_
         """
         user_profiles = self.user_embed(user_ids=user_ids)
-        masked_tokens_preds, masked_tokens_logits = self.pmlm(
+        masked_tokens_preds, masked_tokens_logits = self.classifer(
             user_profiles=user_profiles,
             tokens=tokens,
             attention_masks=attention_masks)
@@ -71,7 +71,7 @@ def Loss(preds_and_logits: Tuple[Tensor, Tensor],
     return loss_fn(unrolled_seq_logits, unrolled_label_tokens)
 
 
-class UserProfileExtractionModelProvider(ModelProviderInterface):
+class PersonalizedModelProvider(ModelProviderInterface):
     """_summary_
 
     Args:
@@ -96,7 +96,7 @@ class UserProfileExtractionModelProvider(ModelProviderInterface):
             self.Load(model_path=model_path)
             return
 
-        self.model = UserProfileExtractionModel(
+        self.model = PersonalizedMaskedLanguageModel(
             user_count=self.user_count)
 
     def Loss(self,

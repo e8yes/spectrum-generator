@@ -30,7 +30,7 @@ class BaselineMaskedLanguageModel(Module):
         return output.loss
 
 
-class BaselineMaskedLanguageModelProvider(ModelProviderInterface):
+class BaselineModelProvider(ModelProviderInterface):
     """_summary_
 
     Args:

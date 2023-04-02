@@ -1,7 +1,7 @@
 from src.model.module.model_provider import ModelProviderInterface
-from src.model.module.masked_lm import BaselineMaskedLanguageModelProvider
-from src.model.module.profile_extractor import \
-    UserProfileExtractionModelProvider
+from src.model.module.model_baseline import BaselineModelProvider
+from src.model.module.model_personalized import \
+    PersonalizedModelProvider
 
 
 def CreateModelProvider(model_type: str,
@@ -16,8 +16,8 @@ def CreateModelProvider(model_type: str,
         ModelProviderInterface: _description_
     """
     if model_type == "baseline":
-        return BaselineMaskedLanguageModelProvider()
+        return BaselineModelProvider()
     elif model_type == "personalized":
-        return UserProfileExtractionModelProvider(user_count=user_count)
+        return PersonalizedModelProvider(user_count=user_count)
     else:
         assert False
