@@ -1,18 +1,8 @@
 from pandas import DataFrame
-from pandas import read_pickle
+from json import dump
+from json import load
+from os import path
 from typing import Dict
-
-
-def LoadRawUserProfiles(file_path: str) -> DataFrame:
-    """_summary_
-
-    Args:
-        file_path (str): _description_
-
-    Returns:
-        DataFrame: _description_
-    """
-    return read_pickle(file_path)
 
 
 def BuildUserLookup(raw_user_profile: DataFrame) -> Dict[str, int]:
@@ -50,3 +40,31 @@ def UserNameToId(user_name: str, user_lookup: Dict[str, int]) -> int:
         return None
 
     return user_lookup[user_name]
+
+
+def LoadUserLookup(input_path: str) -> Dict[str, int]:
+    """_summary_
+
+    Args:
+        input_path (str): _description_
+
+    Returns:
+        Dict[str, int]: _description_
+    """
+    lookup_file = path.join(input_path, "user_lookup.json")
+
+    with open(file=lookup_file, mode="r") as f:
+        return load(fp=f)
+
+
+def SaveUserLookup(lookup: Dict[str, int], output_path: str) -> None:
+    """_summary_
+
+    Args:
+        lookup (Dict[str, int]): _description_
+        output_path (str): _description_
+    """
+    lookup_file = path.join(output_path, "user_lookup.json")
+
+    with open(file=lookup_file, mode="w") as f:
+        dump(obj=lookup, fp=f)
