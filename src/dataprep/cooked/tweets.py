@@ -57,18 +57,19 @@ def DropShortTweets(user_tweets: DataFrame) -> None:
     Args:
         user_tweets (DataFrame): _description_
     """
-    context_content_len =                                   \
+    context_content_len =                                       \
         user_tweets["context_content"].map(len)
-    external_content_summary_len =                          \
+    external_content_summary_len =                              \
         user_tweets["external_content_summary"].map(len)
-    content_len =                                           \
+    content_len =                                               \
         user_tweets["content"].map(len)
 
-    tweet_len =                                             \
-        context_content_len +                               \
-        external_content_summary_len +                      \
+    tweet_len =                                                 \
+        context_content_len +                                   \
+        external_content_summary_len +                          \
         content_len
 
-    user_tweets.drop(
-        user_tweets[tweet_len < TWEET_MINIMUM_LENGTH_THRESHOLD].index,
-        inplace=True)
+    criterion = (tweet_len < TWEET_MINIMUM_LENGTH_THRESHOLD) &  \
+        (content_len == 0)
+
+    user_tweets.drop(user_tweets[criterion].index, inplace=True)
