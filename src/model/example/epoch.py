@@ -1,5 +1,6 @@
 from pandas import DataFrame
 from pandas import read_pickle
+from typing import Tuple
 
 from src.model.example.constants import TWEET_COUNT_PER_USER_EPOCH
 from src.model.example.batch import BatchExampleBuilder
@@ -41,7 +42,7 @@ class DataEpoch:
 
         return self
 
-    def __next__(self) -> BatchExamples:
+    def __next__(self) -> Tuple[int, BatchExamples]:
         """_summary_
 
         Raises:
