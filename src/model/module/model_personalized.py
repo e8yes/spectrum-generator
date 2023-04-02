@@ -1,5 +1,6 @@
 from math import ceil
 from math import pow
+from os import path
 from torch import Tensor
 from torch.nn import CrossEntropyLoss
 from torch.nn import Module
@@ -112,3 +113,7 @@ class PersonalizedModelProvider(ModelProviderInterface):
 
         return Loss(preds_and_logits=preds_and_logits,
                     label_tokens=labels)
+
+    def ExportExtractedInsights(self, output_path: str, tag: str) -> None:
+        user_profile_file_path = path.join(output_path, f"user_profile_{tag}")
+        self.model.user_embed.Export(file_path=user_profile_file_path)

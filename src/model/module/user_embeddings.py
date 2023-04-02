@@ -37,7 +37,7 @@ class UserEmbeddings(Module):
         """
         return self.user_embeddings(user_ids)
 
-    def Save(self, file_path: str) -> None:
+    def Export(self, file_path: str) -> None:
         """_summary_
 
         Args:

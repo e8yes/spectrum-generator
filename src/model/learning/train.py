@@ -44,6 +44,8 @@ def TrainModel(model_type: str,
         print(f"model={model_provider.Name()} @{epoch_num}")
         model_provider.Save(
             model_path=output_path, tag=str(epoch_num))
+        model_provider.ExportExtractedInsights(
+            output_path=output_path, tag=str(epoch_num))
 
         TrainEpoch(epoch_number=epoch_num,
                    model_provider=model_provider,
@@ -53,5 +55,7 @@ def TrainModel(model_type: str,
 
     model_provider.Save(
         model_path=output_path, tag="final")
+    model_provider.ExportExtractedInsights(
+        output_path=output_path, tag="final")
 
     print(f"model={model_provider.Name()} finished.")

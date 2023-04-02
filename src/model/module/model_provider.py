@@ -21,7 +21,7 @@ class ModelProviderInterface:
         Returns:
             str: _description_
         """
-        return None
+        raise NotImplementedError()
 
     def LoadOrCreate(self, model_path: str) -> None:
         """_summary_
@@ -32,7 +32,7 @@ class ModelProviderInterface:
         Returns:
             Module: _description_
         """
-        pass
+        raise NotImplementedError()
 
     def Loss(self,
              user_ids: Tensor,
@@ -52,7 +52,19 @@ class ModelProviderInterface:
         Returns:
             Tensor: _description_
         """
-        return None
+        raise NotImplementedError()
+
+    def ExportExtractedInsights(self, output_path: str, tag: str) -> None:
+        """_summary_
+
+        Args:
+            output_path (str): _description_
+            tag (str): _description_
+
+        Raises:
+            NotImplementedError: _description_
+        """
+        raise NotImplementedError()
 
     def SetMode(self, mode: str) -> None:
         """_summary_

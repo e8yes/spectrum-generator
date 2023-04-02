@@ -59,3 +59,7 @@ class BaselineModelProvider(ModelProviderInterface):
         return self.model(tokens=tokens,
                           attention_masks=attention_masks,
                           label_tokens=labels)
+
+    def ExportExtractedInsights(self, output_path: str, tag: str) -> None:
+        # Nothing to export.
+        return
