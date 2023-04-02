@@ -7,6 +7,7 @@ from torch import Tensor
 from torch import zeros
 from torch import long
 from transformers import BertModel
+from typing import Tuple
 
 from src.model.example.constants import LANGUAGE_MODEL_TYPE
 from src.model.example.constants import LANGUAGE_MODEL_FEATURE_SIZE
@@ -38,14 +39,14 @@ class PersonalizedMaskedLanguageModel(Module):
             out_features=LANGUAGE_MODEL_VOCAB_SIZE)
         self.seq_softmax = Softmax(dim=1)
 
-        # Freezes the language model.
+        # Unfreezes the language model.
         for parameter in self.bert.parameters():
-            parameter.requires_grad = False
+            parameter.requires_grad = True
 
     def forward(self,
                 user_profiles: Tensor,
                 tokens: Tensor,
-                attention_masks: Tensor) -> Tensor:
+                attention_masks: Tensor) -> Tuple[Tensor, Tensor]:
         """_summary_
 
         Args:
@@ -66,9 +67,8 @@ class PersonalizedMaskedLanguageModel(Module):
         batch_size = text_features.last_hidden_state.size()[0]
         sequence_len = text_features.last_hidden_state.size()[1]
 
-        user_profiles_expanded = torch.reshape(
-            input=user_profiles,
-            shape=(batch_size, 1, self.user_profile_size)).\
+        user_profiles_expanded = user_profiles.\
+            view(size=(batch_size, 1, self.user_profile_size)).\
             repeat(repeats=(1, sequence_len, 1))
 
         all_features = torch.concatenate(
@@ -83,4 +83,4 @@ class PersonalizedMaskedLanguageModel(Module):
         seq_logits = self.seq_linear2(h1)
         mask_preds = self.seq_softmax(seq_logits)
 
-        return mask_preds
+        return mask_preds, seq_logits
