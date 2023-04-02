@@ -5,12 +5,14 @@ from src.model.module.model_personalized import \
 
 
 def CreateModelProvider(model_type: str,
-                        user_count: int) -> ModelProviderInterface:
+                        user_count: int,
+                        year_count: int) -> ModelProviderInterface:
     """_summary_
 
     Args:
         model_type (str): _description_
         user_count (int): _description_
+        year_count (int): _description_
 
     Returns:
         ModelProviderInterface: _description_
@@ -18,6 +20,7 @@ def CreateModelProvider(model_type: str,
     if model_type == "baseline":
         return BaselineModelProvider()
     elif model_type == "personalized":
-        return PersonalizedModelProvider(user_count=user_count)
+        return PersonalizedModelProvider(
+            user_count=user_count, year_count=year_count)
     else:
         assert False

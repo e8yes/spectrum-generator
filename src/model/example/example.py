@@ -81,16 +81,19 @@ class Example:
 
     def __init__(self,
                  user_id: Tensor,
+                 creation_year_id: Tensor,
                  masked_token_ids: Tensor,
                  label_token_ids: Tensor) -> None:
         """_summary_
 
         Args:
             user_id (Tensor): _description_
+            creation_year_id (Tensor): _description_
             masked_token_ids (Tensor): _description_
             label_token_ids (Tensor): _description_
         """
         self.user_id = user_id
+        self.creation_year_id = creation_year_id
         self.masked_token_ids = masked_token_ids
         self.label_token_ids = label_token_ids
 
@@ -106,6 +109,7 @@ class ExampleBuilder:
 
     def Build(self,
               user_id: int,
+              creation_year_id: int,
               context_content: List[str],
               external_content_summary: List[str],
               content: List[str],
@@ -169,5 +173,6 @@ class ExampleBuilder:
         label_token_ids = hstack(training_label)
 
         return Example(user_id=LongTensor([user_id]),
+                       creation_year_id=LongTensor([creation_year_id]),
                        masked_token_ids=masked_token_ids,
                        label_token_ids=label_token_ids)

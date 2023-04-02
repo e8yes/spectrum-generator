@@ -4,6 +4,7 @@ from os import path
 from torch import Tensor
 from torch.nn import CrossEntropyLoss
 from torch.nn import Module
+from torch.nn.functional import one_hot
 from typing import Tuple
 
 from src.model.example.constants import LANGUAGE_MODEL_UNMASK_TOKEN_ID
@@ -15,36 +16,58 @@ from src.model.module.model_provider import ModelProviderInterface
 
 
 class PersonalizedMaskedLanguageModel(Module):
+    """_summary_
+
+    Args:
+        Module (_type_): _description_
+    """
+
     def __init__(self,
-                 user_count: int) -> None:
+                 user_count: int,
+                 year_count: int) -> None:
+        """_summary_
+
+        Args:
+            user_count (int): _description_
+            year_count (int): _description_
+        """
         super().__init__()
 
         user_profile_size = int(ceil(pow(user_count, 0.25)))
 
+        self.user_profile_size = user_profile_size
+        self.year_count = year_count
+
         self.user_embed = UserEmbeddings(
             user_count=user_count, user_profile_size=user_profile_size)
         self.classifer = PersonalizedMaskedTokenClassifier(
-            user_profile_size=user_profile_size)
+            user_profile_size=user_profile_size, year_count=year_count)
 
     def forward(self,
                 user_ids: Tensor,
+                creation_year_ids: Tensor,
                 tokens: Tensor,
                 attention_masks: Tensor) -> Tuple[Tensor, Tensor]:
         """_summary_
 
         Args:
             user_ids (Tensor): _description_
+            creation_year_ids (Tensor): _description_
             tokens (Tensor): _description_
             attention_masks (Tensor): _description_
 
         Returns:
-            Tensor: _description_
+            Tuple[Tensor, Tensor]: _description_
         """
         user_profiles = self.user_embed(user_ids=user_ids)
+        years = one_hot(creation_year_ids, num_classes=self.year_count)
+
         masked_tokens_preds, masked_tokens_logits = self.classifer(
             user_profiles=user_profiles,
+            years=years,
             tokens=tokens,
             attention_masks=attention_masks)
+
         return masked_tokens_preds, masked_tokens_logits
 
 
@@ -79,15 +102,19 @@ class PersonalizedModelProvider(ModelProviderInterface):
         ModelProviderInterface (_type_): _description_
     """
 
-    def __init__(self, user_count: int) -> None:
+    def __init__(self,
+                 user_count: int,
+                 year_count: int) -> None:
         """_summary_
 
         Args:
             user_count (int): _description_
+            year_count (int): _description_
         """
         super().__init__()
 
         self.user_count = user_count
+        self.year_count = year_count
 
     def Name(self) -> str:
         return "personalized_model"
@@ -98,16 +125,18 @@ class PersonalizedModelProvider(ModelProviderInterface):
             return
 
         self.model = PersonalizedMaskedLanguageModel(
-            user_count=self.user_count)
+            user_count=self.user_count,
+            year_count=self.year_count)
 
     def Loss(self,
              user_ids: Tensor,
-             years: Tensor,
+             creation_year_ids: Tensor,
              tokens: Tensor,
              attention_masks: Tensor,
              labels: Tensor) -> Tensor:
         preds_and_logits = self.model(
             user_ids=user_ids,
+            creation_year_ids=creation_year_ids,
             tokens=tokens,
             attention_masks=attention_masks)
 

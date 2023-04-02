@@ -36,7 +36,7 @@ class ModelProviderInterface:
 
     def Loss(self,
              user_ids: Tensor,
-             years: Tensor,
+             creation_year_ids: Tensor,
              tokens: Tensor,
              attention_masks: Tensor,
              labels: Tensor) -> Tensor:
@@ -44,7 +44,7 @@ class ModelProviderInterface:
 
         Args:
             user_ids (Tensor): _description_
-            years (Tensor): _description_
+            creation_year_ids (Tensor): _description_
             tokens (Tensor): _description_
             attention_masks (Tensor): _description_
             labels (Tensor): _description_

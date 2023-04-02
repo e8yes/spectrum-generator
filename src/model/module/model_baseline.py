@@ -52,7 +52,7 @@ class BaselineModelProvider(ModelProviderInterface):
 
     def Loss(self,
              user_ids: Tensor,
-             years: Tensor,
+             creation_year_ids: Tensor,
              tokens: Tensor,
              attention_masks: Tensor,
              labels: Tensor) -> Tensor:

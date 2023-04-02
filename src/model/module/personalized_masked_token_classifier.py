@@ -3,7 +3,6 @@ from torch.nn import Module
 from torch.nn import Linear
 from torch.nn import ReLU
 from torch.nn import Softmax
-# from torch.nn.functional import one_hot
 from torch import Tensor
 from torch import zeros
 from torch import long
@@ -20,7 +19,8 @@ class PersonalizedMaskedTokenClassifier(Module):
     """
 
     def __init__(self,
-                 user_profile_size: int) -> None:
+                 user_profile_size: int,
+                 year_count: int) -> None:
         """_summary_
 
         Args:
@@ -32,8 +32,7 @@ class PersonalizedMaskedTokenClassifier(Module):
         self.bert = BertModel.from_pretrained(LANGUAGE_MODEL_TYPE)
 
         self.user_profile_size = user_profile_size
-        # self.year_count = year_count
-        year_count = 0
+        self.year_count = year_count
 
         all_feature_size =                      \
             user_profile_size +                 \
@@ -57,7 +56,7 @@ class PersonalizedMaskedTokenClassifier(Module):
 
     def forward(self,
                 user_profiles: Tensor,
-                # years: Tensor,
+                years: Tensor,
                 tokens: Tensor,
                 attention_masks: Tensor) -> Tuple[Tensor, Tensor]:
         """_summary_
@@ -81,20 +80,20 @@ class PersonalizedMaskedTokenClassifier(Module):
         sequence_len = text_features.last_hidden_state.size()[1]
 
         # Copies the user profile vector sequence_len times.
-        user_profiles_expanded = user_profiles.                         \
-            view(size=(batch_size, 1, self.user_profile_size)).         \
+        user_profiles_expanded = user_profiles.                 \
+            view(size=(batch_size, 1, self.user_profile_size)). \
             repeat(repeats=(1, sequence_len, 1))
 
         # Copies the year vector sequence_len times.
-        # years_expanded = one_hot(years, num_classes=self.year_count).   \
-        #     view(size=(batch_size, 1, self.year_count)).                \
-        #     repeat(repeats=(1, sequence_len, 1))
+        years_expanded = years.                                 \
+            view(size=(batch_size, 1, self.year_count)).        \
+            repeat(repeats=(1, sequence_len, 1))
 
         # Concatenates user profiles, year and textual features into one
         # vector.
         all_features = torch.concatenate(
             (user_profiles_expanded,
-             # years_expanded,
+             years_expanded,
              text_features.last_hidden_state),
             dim=2)
 

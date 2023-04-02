@@ -26,17 +26,25 @@ def _MaxSequenceLength(examples: List[Example]) -> int:
 def _CollectExamples(
         examples: List[Example]) -> Tuple[List[Tensor],
                                           List[Tensor],
+                                          List[Tensor],
                                           List[Tensor]]:
     user_ids = list()
+    creation_year_ids = list()
     masked_tokens = list()
     label_tokens = list()
 
     for example in examples:
         user_ids.append(example.user_id)
+        creation_year_ids.append(example.creation_year_id)
         masked_tokens.append(example.masked_token_ids)
         label_tokens.append(example.label_token_ids)
 
-    return user_ids, masked_tokens, label_tokens
+    return (
+        user_ids,
+        creation_year_ids,
+        masked_tokens,
+        label_tokens
+    )
 
 
 def _PaddedSequences(seqs: List[Tensor], max_len: int) -> Tensor:
@@ -57,6 +65,7 @@ class BatchExamples:
 
     def __init__(self,
                  user_ids: Tensor,
+                 creation_year_ids: Tensor,
                  masked_token_ids: Tensor,
                  attention_masks: Tensor,
                  label_token_ids: Tensor) -> None:
@@ -64,11 +73,13 @@ class BatchExamples:
 
         Args:
             user_ids (Tensor): _description_
+            creation_year_ids (Tensor): _description_
             masked_token_ids (Tensor): _description_
             attention_masks (Tensor): _description_
             label_token_ids (Tensor): _description_
         """
         self.user_ids = user_ids
+        self.creation_year_ids = creation_year_ids
         self.masked_token_ids = masked_token_ids
         self.attention_masks = attention_masks
         self.label_token_ids = label_token_ids
@@ -100,6 +111,7 @@ class BatchExampleBuilder:
 
             example = self.example_builder.Build(
                 user_id=row["user_id"],
+                creation_year_id=row["creation_year_id"],
                 context_content=row["context_content"],
                 external_content_summary=row["external_content_summary"],
                 content=row["content"],
@@ -107,10 +119,13 @@ class BatchExampleBuilder:
 
             examples.append(example)
 
-        user_ids, masked_tokens, label_tokens = _CollectExamples(
-            examples=examples)
+        user_ids,                   \
+            creation_year_ids,      \
+            masked_tokens,          \
+            label_tokens = _CollectExamples(examples=examples)
 
         user_ids = vstack(user_ids)
+        creation_year_ids = vstack(creation_year_ids)
 
         max_len = _MaxSequenceLength(examples=examples)
         masked_tokens = _PaddedSequences(seqs=masked_tokens, max_len=max_len)
@@ -122,6 +137,7 @@ class BatchExampleBuilder:
 
         return BatchExamples(
             user_ids=user_ids,
+            creation_year_ids=creation_year_ids,
             masked_token_ids=masked_tokens,
             attention_masks=attention_masks,
             label_token_ids=label_tokens)

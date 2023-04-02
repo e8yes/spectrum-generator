@@ -8,13 +8,9 @@ if __name__ == "__main__":
         description="Train a model over the user tweet data.")
 
     parser.add_argument(
-        "--user_lookup_file",
+        "--input_path",
         type=str,
-        help="Path to the user lookup JSON file.")
-    parser.add_argument(
-        "--user_tweets_file",
-        type=str,
-        help="Path to the user tweets dataframe file.")
+        help="Path to the cooked data directory.")
     parser.add_argument(
         "--model_type", type=str,
         help="The type of model to train for. Values can either be baseline or"
@@ -33,11 +29,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.user_lookup_file is None:
-        print("user_lookup_file is required.")
-        exit(-1)
-    if args.user_tweets_file is None:
-        print("user_tweets_file is required.")
+    if args.input_path is None:
+        print("input_path is required.")
         exit(-1)
     if args.model_type is None:
         print("model_type is required.")
@@ -52,6 +45,5 @@ if __name__ == "__main__":
     TrainModel(model_type=args.model_type,
                existing_model_path=args.existing_model_file,
                epoch_count=args.epoch_count,
-               user_tweet_file_path=args.user_tweets_file,
-               user_lookup_file_path=args.user_lookup_file,
+               input_path=args.input_path,
                output_path=args.output_path)

@@ -26,7 +26,7 @@ def _AppendReportFile(log_path: str,
 def TrainEpoch(epoch_number: str,
                model_provider: ModelProviderInterface,
                optimizer: Optimizer,
-               user_tweet_file_path: str,
+               input_path: str,
                log_path: str) -> None:
     """_summary_
 
@@ -35,14 +35,14 @@ def TrainEpoch(epoch_number: str,
         model_provider (ModelProviderInterface): _description_
         model (Module): _description_
         optimizer (Optimizer): _description_
-        user_tweet_file_path (str): _description_
+        input_path (str): _description_
         log_path (str): _description_
     """
     _CreateReportFile(log_path=log_path,
                       model_name=model_provider.Name(),
                       epoch_number=epoch_number)
 
-    epoch = DataEpoch(user_tweet_file_path=user_tweet_file_path, batch_size=64)
+    epoch = DataEpoch(input_path=input_path, batch_size=64)
     model_provider.SetMode(mode="train")
 
     last_progress = -1
@@ -50,7 +50,7 @@ def TrainEpoch(epoch_number: str,
         optimizer.zero_grad()
 
         loss = model_provider.Loss(user_ids=batch.user_ids,
-                                   years=None,
+                                   creation_year_ids=batch.creation_year_ids,
                                    tokens=batch.masked_token_ids,
                                    attention_masks=batch.attention_masks,
                                    labels=batch.label_token_ids)
