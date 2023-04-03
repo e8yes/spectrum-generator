@@ -9,6 +9,7 @@ from typing import Set
 from math import ceil
 import numpy as np
 
+from src.model.example.constants import TWEET_MASK_RATIO
 from src.model.example.constants import LANGUAGE_MODEL_TYPE
 # from src.model.example.constants import LANGUAGE_MODEL_CLS_TOKEN_ID
 from src.model.example.constants import LANGUAGE_MODEL_SEP_TOKEN_ID
@@ -17,7 +18,7 @@ from src.model.example.constants import LANGUAGE_MODEL_MASK_TOKEN_ID
 
 def SampleSentenceMask(sentence: List[str],
                        word_importance: List[float],
-                       mask_ratio: float = 0.15) -> Set[int]:
+                       mask_ratio: float) -> Set[int]:
     """_summary_
 
     Args:
@@ -158,7 +159,9 @@ class ExampleBuilder:
             training_label.append(sep)
 
         masked_positions = SampleSentenceMask(
-            sentence=content, word_importance=content_importance)
+            sentence=content,
+            word_importance=content_importance,
+            mask_ratio=TWEET_MASK_RATIO)
         label_content_code, masked_content_code = EncodeMaskedInput(
             text=content,
             masked_positions=masked_positions,
