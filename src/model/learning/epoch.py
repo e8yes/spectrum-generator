@@ -42,7 +42,10 @@ def TrainEpoch(epoch_number: str,
                       model_name=model_provider.Name(),
                       epoch_number=epoch_number)
 
-    epoch = DataEpoch(input_path=input_path, batch_size=64)
+    epoch = DataEpoch(epoch_number=epoch_number,
+                      input_path=input_path,
+                      temp_path=log_path,
+                      batch_size=64)
     model_provider.SetMode(mode="train")
 
     last_progress = -1
