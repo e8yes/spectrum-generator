@@ -3,6 +3,7 @@ from torch.nn import Module
 from torch.nn import Linear
 from torch.nn import ReLU
 from torch.nn import Softmax
+from torch.nn import TransformerEncoderLayer
 from torch import Tensor
 from torch import zeros
 from torch import long
@@ -46,11 +47,16 @@ class PersonalizedMaskedTokenClassifier(Module):
 
         self.seq_linear2 = Linear(
             in_features=all_feature_size,
-            out_features=all_feature_size)
-        self.seq_relu2 = ReLU()
+            out_features=LANGUAGE_MODEL_FEATURE_SIZE)
+
+        self.transformer = TransformerEncoderLayer(
+            d_model=LANGUAGE_MODEL_FEATURE_SIZE,
+            nhead=LANGUAGE_MODEL_FEATURE_SIZE//64,
+            dim_feedforward=4*LANGUAGE_MODEL_FEATURE_SIZE,
+            batch_first=True)
 
         self.seq_linear3 = Linear(
-            in_features=all_feature_size,
+            in_features=LANGUAGE_MODEL_FEATURE_SIZE,
             out_features=LANGUAGE_MODEL_VOCAB_SIZE)
         self.seq_softmax = Softmax(dim=1)
 
@@ -97,14 +103,19 @@ class PersonalizedMaskedTokenClassifier(Module):
              text_features.last_hidden_state),
             dim=2)
 
-        # Transforms and makes masked word predictions at every location in
-        # the sequence.
+        # Mixes the user profiles, year and textual features together in each
+        # position in the sequence.
         z1 = self.seq_linear1(all_features)
         h1 = self.seq_relu1(z1)
 
         z2 = self.seq_linear2(h1)
-        h2 = self.seq_relu2(all_features + z2)
 
+        # Applies one self-attention transformer layer for the new feature h1.
+        src_key_padding_mask = (1 - attention_masks).bool()
+        h2 = self.transformer(
+            src=z2, src_key_padding_mask=src_key_padding_mask)
+
+        # Makes token prediction for each position in the sequence.
         seq_logits = self.seq_linear3(h2)
         mask_preds = self.seq_softmax(seq_logits)
 
