@@ -69,7 +69,7 @@ def DropShortTweets(user_tweets: DataFrame) -> None:
         external_content_summary_len +                          \
         content_len
 
-    criterion = (tweet_len < TWEET_MINIMUM_LENGTH_THRESHOLD) &  \
+    criterion = (tweet_len < TWEET_MINIMUM_LENGTH_THRESHOLD) |  \
         (content_len == 0)
 
     user_tweets.drop(user_tweets[criterion].index, inplace=True)
