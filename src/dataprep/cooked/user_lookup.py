@@ -3,9 +3,11 @@ from json import dump
 from json import load
 from os import path
 from typing import Dict
+from typing import Tuple
 
 
-def BuildUserLookup(raw_user_profile: DataFrame) -> Dict[str, int]:
+def BuildUserLookup(
+        raw_user_profile: DataFrame) -> Tuple[Dict[str, int], Dict[int, str]]:
     """_summary_
 
     Args:
@@ -23,7 +25,9 @@ def BuildUserLookup(raw_user_profile: DataFrame) -> Dict[str, int]:
         lookup[user_name] = user_id
         user_id += 1
 
-    return lookup
+    inv_lookup = {v: k for k, v in lookup.items()}
+
+    return lookup, inv_lookup
 
 
 def UserNameToId(user_name: str, user_lookup: Dict[str, int]) -> int:
@@ -42,7 +46,7 @@ def UserNameToId(user_name: str, user_lookup: Dict[str, int]) -> int:
     return user_lookup[user_name]
 
 
-def LoadUserLookup(input_path: str) -> Dict[str, int]:
+def LoadUserLookup(input_path: str) -> Dict[int, str]:
     """_summary_
 
     Args:
@@ -57,7 +61,7 @@ def LoadUserLookup(input_path: str) -> Dict[str, int]:
         return load(fp=f)
 
 
-def SaveUserLookup(lookup: Dict[str, int], output_path: str) -> None:
+def SaveUserLookup(lookup: Dict[int, str], output_path: str) -> None:
     """_summary_
 
     Args:
