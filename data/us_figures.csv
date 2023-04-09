@@ -1,55 +1,55 @@
-Name,Link
-"President Biden",https://twitter.com/POTUS
-"Biden, Joe",https://twitter.com/JoeBiden
-"President Trump 45",https://twitter.com/POTUS45
-"Trump, Jr. Donald", https://twitter.com/realDonaldTrump
-"President Obama 44",https://twitter.com/POTUS44
-"Obama, Barack",https://twitter.com/BarackObama
-"George W. Bush Presidential Center",https://twitter.com/TheBushCenter
-"Clinton, Hillary",https://twitter.com/HillaryClinton
-"Clinton, Bill",https://twitter.com/BillClinton
-"Jean-Pierre, Karine Official",https://twitter.com/PressSec
-"Jean-Pierre, Karine",https://twitter.com/kjp46
-"Ryder, Patrick",https://twitter.com/pentagonpressec
-"The White House",https://twitter.com/WhiteHouse
-"Bates, Andrew",https://twitter.com/AndrewJBates46
-"Psaki, Jen",https://twitter.com/jrpsaki
-"Smith, Ben",https://twitter.com/semaforben
-"Weigel, David",https://twitter.com/daveweigel
-"Sonmez, Felicia",https://twitter.com/feliciasonmez
-"Goddard, Taegan",https://twitter.com/politicalwire
-"Page, Susan",https://twitter.com/SusanPage
-"Wagner, Alex",https://twitter.com/alexwagner
-"Wilson, Reid",https://twitter.com/PoliticsReid
-"Elliott, Phil",https://twitter.com/Philip_Elliott
-"Reinhard, Beth",https://twitter.com/bethreinhard
-"Franke-Ruta, Garance",https://twitter.com/thegarance
-"Memoli, Mike",https://twitter.com/mikememoli
-"McPike, Erin",https://twitter.com/ErinMcPike
-"Knoller, Mark",https://twitter.com/markknoller
-"Khimm, Suzy",https://twitter.com/SuzyKhimm
-"Tapper, Jake",https://twitter.com/jaketapper
-"Erickson, Erick",https://twitter.com/ewerickson
-"Finn, Mindy",https://twitter.com/mindyfinn
-"Mataconis, Doug",https://twitter.com/dmataconis
-"Carney, Tim",https://twitter.com/TPCarney
-"Barro, Josh",https://twitter.com/jbarro
-"Hemingway, Mark",https://twitter.com/Heminator
-"Salam, Reihan",https://twitter.com/reihan
-"Bellantoni, Christina",https://twitter.com/cbellantoni
-"Atrios",https://twitter.com/Atrios
-"Pitney, Nico",https://twitter.com/nicopitney
-"Greenwald, Glenn",https://twitter.com/ggreenwald
-"Benen, Steve",https://twitter.com/stevebenen
-"Mair, Liz",https://twitter.com/LizMair
-"Sabato, Larry",https://twitter.com/LarrySabato
-"Wasserman, Dave",https://twitter.com/Redistrict
-"Brazile, Donna",https://twitter.com/donnabrazile
-"Todd, Chuck",https://twitter.com/chucktodd
-"NPR Politics",https://twitter.com/nprpolitics
-"McClatchyDC",https://twitter.com/McClatchyDC
-"Wonkette",https://twitter.com/Wonkette
-"Heinze, Christian",https://twitter.com/cpheinze
-"PolitiFact",https://twitter.com/politifact
-"Cook Political Report",https://twitter.com/CookPolitical
+Name,Link,Party
+"President Biden",https://twitter.com/POTUS,D
+"Biden, Joe",https://twitter.com/JoeBiden,D
+"President Trump 45",https://twitter.com/POTUS45,R
+"Trump, Jr. Donald", https://twitter.com/realDonaldTrump,R
+"President Obama 44",https://twitter.com/POTUS44,D
+"Obama, Barack",https://twitter.com/BarackObama,D
+"George W. Bush Presidential Center",https://twitter.com/TheBushCenter,R
+"Clinton, Hillary",https://twitter.com/HillaryClinton,D
+"Clinton, Bill",https://twitter.com/BillClinton,D
+"Jean-Pierre, Karine Official",https://twitter.com/PressSec,D
+"Jean-Pierre, Karine",https://twitter.com/kjp46,D
+"Ryder, Patrick",https://twitter.com/pentagonpressec,I
+"The White House",https://twitter.com/WhiteHouse,D
+"Bates, Andrew",https://twitter.com/AndrewJBates46,D
+"Psaki, Jen",https://twitter.com/jrpsaki,D
+"Smith, Ben",https://twitter.com/semaforben,I
+"Weigel, David",https://twitter.com/daveweigel,R
+"Sonmez, Felicia",https://twitter.com/feliciasonmez,D
+"Goddard, Taegan",https://twitter.com/politicalwire,I
+"Page, Susan",https://twitter.com/SusanPage,D
+"Wagner, Alex",https://twitter.com/alexwagner,D
+"Wilson, Reid",https://twitter.com/PoliticsReid,D
+"Elliott, Phil",https://twitter.com/Philip_Elliott,I
+"Reinhard, Beth",https://twitter.com/bethreinhard,D
+"Franke-Ruta, Garance",https://twitter.com/thegarance,D
+"Memoli, Mike",https://twitter.com/mikememoli,I
+"McPike, Erin",https://twitter.com/ErinMcPike,I
+"Knoller, Mark",https://twitter.com/markknoller,I
+"Khimm, Suzy",https://twitter.com/SuzyKhimm,I
+"Tapper, Jake",https://twitter.com/jaketapper,I
+"Erickson, Erick",https://twitter.com/ewerickson,R
+"Finn, Mindy",https://twitter.com/mindyfinn,R
+"Mataconis, Doug",https://twitter.com/dmataconis,R
+"Carney, Tim",https://twitter.com/TPCarney,R
+"Barro, Josh",https://twitter.com/jbarro,R
+"Hemingway, Mark",https://twitter.com/Heminator,R
+"Salam, Reihan",https://twitter.com/reihan,R
+"Bellantoni, Christina",https://twitter.com/cbellantoni,D
+"Atrios",https://twitter.com/Atrios,D
+"Pitney, Nico",https://twitter.com/nicopitney,D
+"Greenwald, Glenn",https://twitter.com/ggreenwald,D
+"Benen, Steve",https://twitter.com/stevebenen,D
+"Mair, Liz",https://twitter.com/LizMair,R
+"Sabato, Larry",https://twitter.com/LarrySabato,D
+"Wasserman, Dave",https://twitter.com/Redistrict,I
+"Brazile, Donna",https://twitter.com/donnabrazile,D
+"Todd, Chuck",https://twitter.com/chucktodd,I
+"NPR Politics",https://twitter.com/nprpolitics,I
+"McClatchyDC",https://twitter.com/McClatchyDC,I
+"Wonkette",https://twitter.com/Wonkette,D
+"Heinze, Christian",https://twitter.com/cpheinze,I
+"PolitiFact",https://twitter.com/politifact,I
+"Cook Political Report",https://twitter.com/CookPolitical,I
 
