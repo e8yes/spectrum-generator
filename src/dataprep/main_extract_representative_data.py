@@ -19,8 +19,6 @@ def _Extract(raw_timeline_file: str, output_path: str) -> None:
 
     user_repr_tweets.to_pickle(
         path.join(output_path, "user_representative_tweets"))
-    user_repr_tweets.to_csv(
-        path.join(output_path, "user_representative_tweets.csv"))
 
 
 if __name__ == "__main__":
