@@ -19,8 +19,8 @@ def _CookUserLookup(raw_user_profile_file: str,
 
     user_profiles = read_pickle(raw_user_profile_file)
 
-    user_lookup = BuildUserLookup(raw_user_profile=user_profiles)
-    SaveUserLookup(lookup=user_lookup, output_path=output_path)
+    user_lookup, inv_lookup = BuildUserLookup(raw_user_profile=user_profiles)
+    SaveUserLookup(lookup=inv_lookup, output_path=output_path)
 
     return user_lookup
 
