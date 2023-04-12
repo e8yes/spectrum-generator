@@ -86,8 +86,16 @@ def _CreateChart(points: ndarray,
     return chart
 
 
-class ProfileChartView(QChartView):
+class ProfileView(QChartView):
+    """_summary_
+
+    Args:
+        QChartView (_type_): _description_
+    """
+
     def __init__(self) -> None:
+        """_summary_
+        """
         super().__init__()
         self.setRenderHint(QPainter.Antialiasing)
 
