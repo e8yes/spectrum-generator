@@ -98,8 +98,6 @@ class ProfileData:
         user1_profile = self.df[self.df["user_name"]
                                 == user_name1]["profile"].values[0]
         user2_profile = self.df[self.df["user_name"]
-                                == user_name2]["profile"].values
-
-        print(user1_profile.shape)
+                                == user_name2]["profile"].values[0]
 
         return norm(user1_profile - user2_profile)
