@@ -6,16 +6,19 @@ from numpy import max
 from numpy import min
 from numpy import unique
 from numpy import full
+from typing import Tuple
 from PySide6.QtCharts import QChart
 from PySide6.QtCharts import QChartView
 from PySide6.QtCharts import QScatterSeries
 from PySide6.QtCharts import QValueAxis
-from PySide6.QtGui import QPainter
-from PySide6.QtGui import QColor
 from PySide6.QtCore import Qt
-from typing import Tuple
+from PySide6.QtGui import QColor
+from PySide6.QtGui import QPainter
+from PySide6.QtWidgets import QFrame
 
 from src.explorer.profile_explorer.data_profile import ProfileData
+from src.explorer.profile_explorer.view_search_user import \
+    SearchUserView
 
 
 def _CreateSeries(xs: ndarray,
@@ -93,11 +96,21 @@ class ProfileView(QChartView):
         QChartView (_type_): _description_
     """
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 scatter_chart_frame: QFrame,
+                 search_user_view: SearchUserView) -> None:
         """_summary_
+
+        Args:
+            scatter_chart_frame (QFrame): _description_
+            search_user_view (SearchUserView): _description_
         """
         super().__init__()
+
+        self.search_user_view = search_user_view
+
         self.setRenderHint(QPainter.Antialiasing)
+        scatter_chart_frame.layout().addWidget(self)
 
     def Plot(self, profile_data: ProfileData, feature: str = None) -> None:
         """_summary_
