@@ -1,0 +1,3 @@
+{
+    "files": ["widget.py","data_representative.py","data_profile.py","form.ui","chart_profile.py"]
+}
