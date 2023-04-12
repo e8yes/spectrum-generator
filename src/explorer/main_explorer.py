@@ -2,10 +2,10 @@ import argparse
 import sys
 from PySide6.QtWidgets import QApplication
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.data_representative import \
+from src.explorer.data_profile import ProfileData
+from src.explorer.data_representative import \
     RepresentativeData
-from src.explorer.profile_explorer.view_explorer import MainExplorerView
+from src.explorer.view_explorer import MainExplorerView
 
 
 def _Launch(profile_data_path: str, rep_data_path: str) -> None:

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QComboBox
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.view_profile import ProfileView
+from src.explorer.data_profile import ProfileData
+from src.explorer.view_profile import ProfileView
 
 
 class FeatureView:

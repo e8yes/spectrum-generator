@@ -16,9 +16,8 @@ from PySide6.QtGui import QColor
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QFrame
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.view_search_user import \
-    SearchUserView
+from src.explorer.data_profile import ProfileData
+from src.explorer.view_search_user import SearchUserView
 
 
 def _CreateSeries(xs: ndarray,

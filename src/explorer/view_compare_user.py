@@ -2,11 +2,9 @@ from typing import List
 from PySide6.QtWidgets import QLineEdit
 from PySide6.QtWidgets import QTextBrowser
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.data_representative import \
-    RepresentativeData
-from src.explorer.profile_explorer.data_representative import \
-    RepresentativeEntry
+from src.explorer.data_profile import ProfileData
+from src.explorer.data_representative import RepresentativeData
+from src.explorer.data_representative import RepresentativeEntry
 
 
 def _GenerateOutputText(

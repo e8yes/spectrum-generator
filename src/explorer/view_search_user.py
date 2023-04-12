@@ -3,9 +3,8 @@ from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QPushButton
 from PySide6.QtWidgets import QRadioButton
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.view_compare_user import \
-    UserComparisonView
+from src.explorer.data_profile import ProfileData
+from src.explorer.view_compare_user import UserComparisonView
 
 
 class SearchUserView:

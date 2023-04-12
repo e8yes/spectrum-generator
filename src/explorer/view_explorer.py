@@ -5,19 +5,14 @@ from PySide6.QtWidgets import QWidget
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py
-from src.explorer.profile_explorer.ui_form import Ui_Widget
+from src.explorer.ui_form import Ui_Widget
 
-from src.explorer.profile_explorer.data_profile import ProfileData
-from src.explorer.profile_explorer.data_representative import \
-    RepresentativeData
-from src.explorer.profile_explorer.view_compare_user import \
-    UserComparisonView
-from src.explorer.profile_explorer.view_search_user import \
-    SearchUserView
-from src.explorer.profile_explorer.view_feature import \
-    FeatureView
-from src.explorer.profile_explorer.view_profile import \
-    ProfileView
+from src.explorer.data_profile import ProfileData
+from src.explorer.data_representative import RepresentativeData
+from src.explorer.view_compare_user import UserComparisonView
+from src.explorer.view_search_user import SearchUserView
+from src.explorer.view_feature import FeatureView
+from src.explorer.view_profile import ProfileView
 
 
 class MainExplorerView(QWidget):
