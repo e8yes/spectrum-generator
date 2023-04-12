@@ -22,6 +22,7 @@ class ProfileData:
             profile_data_path (str): _description_
         """
         self.df: DataFrame = read_pickle(filepath_or_buffer=profile_data_path)
+        self.cached_vis_embed = None
 
     def GetAvailableFeatures(self) -> List[str]:
         """_summary_
@@ -39,11 +40,11 @@ class ProfileData:
 
         return sorted(result)
 
-    def GetFeatures(self, feature) -> ndarray:
+    def GetFeatures(self, feature: str) -> ndarray:
         """_summary_
 
         Args:
-            feature (_type_): _description_
+            feature (str): _description_
 
         Returns:
             ndarray: _description_
@@ -57,12 +58,15 @@ class ProfileData:
         Returns:
             ndarray: _description_
         """
+        if self.cached_vis_embed is not None:
+            return self.cached_vis_embed
+
         profiles = vstack(self.df["profile"].values)
 
         tsne = TSNE(n_components=2, random_state=42)
-        vis_embed = tsne.fit_transform(profiles)
+        self.cached_vis_embed = tsne.fit_transform(profiles)
 
-        return vis_embed
+        return self.cached_vis_embed
 
     def SearchDatapoint(self, user_name: str) -> Optional[int]:
         """_summary_
